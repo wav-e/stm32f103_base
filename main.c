@@ -1,4 +1,17 @@
-void main (void)
+#include "main.h"
+#include "bsp.h"
+
+void main(void)
 {
-    while (1);
+	bspInit_sysClk();
+	bspInit_GPIO();
+	bspInit_sysTimer();
+
+	while (1)
+	{
+		bspCtl_LedOn();
+		delay_ms(500);
+		bspCtl_LedOff();
+		delay_ms(500);
+	}
 }
