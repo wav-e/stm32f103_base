@@ -17,8 +17,7 @@ SRC = $(wildcard *.c)
 # var store renamed list .c -> .o from $(SRC)
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
-#adding startup.s/.o
-#OBJ += startup.o
+
 
 
 all: $(TARGET).bin
@@ -28,11 +27,6 @@ startup.o: startup.s
 
 %.o : %.c
 	$(CC) $(CFLAGS) -Wall  -c $< -o $@
-
-#main.o: main.c
-#	$(CC) $(CFLAGS) -c  SRC)
-
-
 
 
 $(TARGET).elf: linker.ld $(OBJ) startup.o
