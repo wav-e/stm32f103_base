@@ -24,10 +24,10 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 all: $(TARGET).bin
 
 startup.o: startup.s
-	$(AS) -o startup.o startup.s
+	$(AS) -Wall -o startup.o startup.s 
 
 %.o : %.c
-	$(CC) $(CFLAGS)  -c $< -o $@
+	$(CC) $(CFLAGS) -Wall  -c $< -o $@
 
 #main.o: main.c
 #	$(CC) $(CFLAGS) -c  SRC)
@@ -36,7 +36,7 @@ startup.o: startup.s
 
 
 $(TARGET).elf: linker.ld $(OBJ) startup.o
-	$(LD) -T linker.ld -o $(TARGET).elf $(OBJ) startup.o
+	$(LD) -T linker.ld -o $(TARGET).elf startup.o $(OBJ)
 
 $(TARGET).bin: $(TARGET).elf
 	$(BIN) -O binary $(TARGET).elf $(TARGET).bin
