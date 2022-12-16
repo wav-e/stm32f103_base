@@ -44,6 +44,9 @@ $(TARGET).bin: $(TARGET).elf
 clean:
 	rm -f *.o *.elf *.bin
 
+rebuild: clean
+	make all
+
 flash: $(TARGET).bin
 	$(STL) write $(TARGET).bin 0x8000000
 
