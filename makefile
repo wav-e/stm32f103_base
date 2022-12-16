@@ -23,7 +23,7 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 all: $(TARGET).bin
 
 startup.o: startup.s
-	$(AS) -Wall -o startup.o startup.s 
+	$(AS) -o startup.o startup.s 
 
 %.o : %.c
 	$(CC) $(CFLAGS) -Wall  -c $< -o $@
