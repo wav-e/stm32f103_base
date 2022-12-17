@@ -9,6 +9,6 @@
 #ifndef __MAIN_H
 #define __MAIN_H
 
-void main(void);
+int main(void);
 
 #endif /* __MAIN_H */
