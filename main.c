@@ -1,7 +1,7 @@
 #include "main.h"
 #include "bsp.h"
 
-void main(void)
+int main(void)
 {
 	bspInit_sysClk();
 	bspInit_GPIO();

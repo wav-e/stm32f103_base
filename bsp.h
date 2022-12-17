@@ -11,10 +11,7 @@
 #define LED_GREEN_OFF()			GPIOC->BSRR = GPIO_BSRR_BS13; /// disable led
 
 
-//#define SysTick_Handler bspSysTick_Handler
-
 #define SYSTEM_CLOCK_FREQ 		72000000
-
 
 
 void bspCtl_LedOn(void);

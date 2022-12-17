@@ -114,11 +114,10 @@ void bspCtl_LedToggle(void){
 }
 
 
-/*
+
 void SysTick_Handler(void)
 {
 	sys_tick++;
 	if (delay_cnt_ms)
 		delay_cnt_ms--;
 }
-*/
