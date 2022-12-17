@@ -22,12 +22,8 @@ OBJ = $(patsubst %.c, %.o, $(SRC))
 
 all: $(TARGET).bin
 
-#startup.o: startup.s
-#	$(AS) -o startup.o startup.s 
-
 %.o : %.c
 	$(CC) $(CFLAGS) -Wall  -c $< -o $@
-
 
 $(TARGET).elf: linker.ld $(OBJ) 
 	$(LD) -T linker.ld -o $(TARGET).elf $(OBJ) -Map=firmware.map
