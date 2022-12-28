@@ -2,14 +2,14 @@ TARGET = firmware
 
 CC = arm-none-eabi-gcc
 AS = arm-none-eabi-as
-LD = arm-none-eabi-ld
+LD = arm-none-eabi-gcc 
 BIN = arm-none-eabi-objcopy
 STL = st-flash
 
 # define for CMSIS
 DEFINES = STM32F103xB 
-CFLAGS = -mthumb -mcpu=cortex-m3 -D $(DEFINES)
-
+CFLAGS = -mthumb -mcpu=cortex-m3 -mfloat-abi=soft -D $(DEFINES) 
+LDFLAGS = -mthumb -mcpu=cortex-m3 -mfloat-abi=soft --specs=nano.specs -T linker.ld -Wl,-Map=firmware.map 
 
 # get list .c files in working dir
 SRC = $(wildcard *.c)  
@@ -18,15 +18,13 @@ SRC = $(wildcard *.c)
 OBJ = $(patsubst %.c, %.o, $(SRC))
 
 
-
-
 all: $(TARGET).bin
 
 %.o : %.c
 	$(CC) $(CFLAGS) -Wall  -c $< -o $@
 
 $(TARGET).elf: linker.ld $(OBJ) 
-	$(LD) -T linker.ld -o $(TARGET).elf $(OBJ) -Map=firmware.map
+	$(LD) $(LDFLAGS) -o $(TARGET).elf $(OBJ) 
 
 $(TARGET).bin: $(TARGET).elf
 	$(BIN) -O binary $(TARGET).elf $(TARGET).bin

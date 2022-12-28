@@ -17,8 +17,11 @@ extern uint32_t _sdata;
 extern uint32_t _edata;
 extern uint32_t _sbss;
 extern uint32_t _ebss;
-
+extern uint32_t _la_data;
+void __libc_init_array(void);
 void Reset_handler(void);
+
+
 
 /* other exeption handlers prototipes */
 /* if any undeclared - it calls Default_handler */
@@ -156,7 +159,7 @@ void Reset_handler(void)
 
 	/* copy .data section to sram */
 	size = (uint32_t)&_edata - (uint32_t)&_sdata;
-	pSrc = (uint8_t*)&_etext;
+	pSrc = (uint8_t*)&_la_data;
 	pDst = (uint8_t*)&_sdata;
 
 	for (uint32_t i=0; i<size; i++){
@@ -170,8 +173,12 @@ void Reset_handler(void)
 	{
 		*pDst++ = 0;
 	}
-	/* call main */
 
+	/* init libc functions */
+	__libc_init_array();
+
+
+	/* call main */
 	main();
 }
 
