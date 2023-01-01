@@ -23,11 +23,13 @@ void bspInit_sysClk(void)
 	while (!READ_BIT(RCC->CR, RCC_CR_HSERDY))
 	{;}
 
-	SET_BIT(RCC->CR, RCC_CR_CSSON); // clock security
+	//SET_BIT(RCC->CR, RCC_CR_CSSON); // clock security
 	/* AHB prescaler /1 (72MHz, (8MHz now)) */
 	MODIFY_REG (RCC->CFGR, RCC_CFGR_HPRE_Msk, RCC_CFGR_HPRE_DIV1);
+	
 	/* APB1 prescaler /2 (36MHz(max)) (4MHz now)) */
 	MODIFY_REG (RCC->CFGR, RCC_CFGR_PPRE1_Msk, RCC_CFGR_PPRE1_DIV2);
+
 	/* APB high-speed prescaler (APB2) /1 */
 	MODIFY_REG (RCC->CFGR, RCC_CFGR_PPRE2_Msk, RCC_CFGR_PPRE2_DIV1);
 	/* adc prescaler /6 (14Mhz max) */
