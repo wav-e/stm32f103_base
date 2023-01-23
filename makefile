@@ -8,8 +8,8 @@ STL = st-flash
 
 # define for CMSIS
 DEFINES = STM32F103xB 
-CFLAGS = -mthumb -mcpu=cortex-m3 -mfloat-abi=soft -D $(DEFINES) 
-LDFLAGS = -mthumb -mcpu=cortex-m3 -mfloat-abi=soft --specs=nano.specs -T linker.ld -Wl,-Map=firmware.map 
+CFLAGS = -mthumb -mcpu=cortex-m3 -mfloat-abi=soft -D $(DEFINES) -g -O0 
+LDFLAGS = -mthumb -mcpu=cortex-m3 -mfloat-abi=soft --specs=nano.specs -T linker.ld -Wl,-Map=firmware.map -Wl,--print-memory-usage -lm 
 
 # get list .c files in working dir
 SRC = $(wildcard *.c)  
@@ -24,7 +24,7 @@ all: $(TARGET).bin
 	$(CC) $(CFLAGS) -Wall  -c $< -o $@
 
 $(TARGET).elf: linker.ld $(OBJ) 
-	$(LD) $(LDFLAGS) -o $(TARGET).elf $(OBJ) 
+	$(LD) -o $(TARGET).elf $(OBJ) $(LDFLAGS) 
 
 $(TARGET).bin: $(TARGET).elf
 	$(BIN) -O binary $(TARGET).elf $(TARGET).bin
