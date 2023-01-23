@@ -29,6 +29,7 @@ void bspInit_sysClk(void);
 void bspInit_sysTimer(void);
 
 void delay_ms(uint32_t time_ms);
+uint32_t bsp_getTick(void);
 
 /**
   * @brief  Initialize gpio.

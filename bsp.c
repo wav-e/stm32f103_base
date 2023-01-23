@@ -102,7 +102,6 @@ void delay_ms(uint32_t time_ms)
 	{;}
 }
 
-
 void bspCtl_LedOn(void){
 	LED_GREEN_ON();
 }
@@ -116,6 +115,10 @@ void bspCtl_LedToggle(void){
 }
 
 
+uint32_t bsp_getTick(void)
+{
+	return sys_tick;
+}
 
 void SysTick_Handler(void)
 {
