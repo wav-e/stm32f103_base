@@ -3,10 +3,12 @@
 #include "uart_drv.h"
 #include <stdio.h>
 #include <string.h>
-
+#include "i2cDrv.h"
+#include "ssd1306.h"
+#include "ssd1306_tests.h"
 
 UART_DRV uart3;
-
+I2C_DRV i2c1;
 
 int _write(int fd, char* ptr, int len) {
 	uartDrv_transmitt(&uart3, ptr, len);
@@ -27,7 +29,7 @@ void uwPrintBinReg(uint32_t reg)
 	}
 }
 
-
+/** print rcc clock settings */
 void printClockSettings(void)
 {
 	uint32_t tmp;
@@ -154,44 +156,57 @@ void printClockSettings(void)
 	}
 	APB2_clk = hclk/APB2_prescaler;
 	printf("PCLK2:     %dHz = HCLK/%d\r\n", APB2_clk, APB2_prescaler);
-
-
-
-
-
-	// printf("System clock switch:     ");
-	// tmp = (RCC->CFGR & RCC_CFGR_SW_Msk) >> RCC_CFGR_SW_Pos;
-	// switch (tmp)
-	// {
-	// 	case 0: printf("HSI"); break;
-	// 	case 1: printf("HSE"); break;
-	// 	case 2: printf("PLL"); clock_pll_flag = 1; break;
-	// 	default: printf("ERROR"); break;
-	// }
-
 }
+
+/*  */
+static void oled_init(void)
+{
+
+	uint8_t init[] = {
+	0x00,
+	0xAE,         // Display OFF
+	0xA8, 0x1F,   // set multiplex (HEIGHT-1): 0x1F for 128x32, 0x3F for 128x64
+	0xD3, 0x00,   // Display offset to 0
+	0x40,         // Set display start line to 0
+	0x8D, 0x14,   // Charge pump enabled
+	0x20, 0x00,   // Memory addressing mode 0x00 Horizontal 0x01 Vertical
+	0xDA, 0x02,   // Set COM Pins hardware configuration to sequential
+	0x81, 0x80,   // Set contrast
+	0xD9, 0xF1,   // Set pre-charge period
+	0xDB, 0x40,   // Set vcom detect
+
+	0x22, 0x00, 0x03, // Page min to max
+	0x21, 0x00, 0x7F, // Column min to max
+	0xAF  // Display on
+	};
+	i2cDrv_tx(&i2c1, 0x3C<<1, init, sizeof(init));
+}
+
 
 int main(void)
 {
-	uint8_t buf[] = "\n";
-	uint8_t buf2 = 0xFF;
-
-
 	bspInit_sysClk();
 	bspInit_GPIO();
 	bspInit_sysTimer();
 	uartDrv_init(&uart3);
-	
+	i2cDrv_init(&i2c1);
 
 	printf("\r\n\r\nUART3....... OK\r\n");
 
 	printClockSettings();
-
+	//oled_init();
+	ssd1306_Init();
 	while (1)
 	{
-		printf("hello\n");
+		//printf("hello\n");
 		delay_ms(1000);
 		bspCtl_LedToggle();
+		//ssd1306_Init();
+
+		ssd1306_TestAll();
+		//i2cDrv_scanBus(&i2c1);
+		//master_write(&i2c1);
+		//i2cDrv_scanBusHal(&i2c1);
 
 	}
 }
